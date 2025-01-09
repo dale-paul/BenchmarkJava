@@ -19,6 +19,14 @@ jobs:
         with:
           command: code test
           args: |
-            --severity-threshold=high
+            --org=${{ vars.SNYKLAB_ORG }}
+            --project-name=BenchmarkJava
+      - name: Continuously monitor Open Source Software
+        uses: snyk/actions/maven@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: monitor
+          args: |
             --org=${{ vars.SNYKLAB_ORG }}
             --project-name=BenchmarkJava
