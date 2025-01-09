@@ -18,6 +18,6 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: |
-          --severity-threshold=high
-          --org=${{env.SNYKLAB_ORG}}
-          --project-name=BenchmarkJava
+            --severity-threshold=high
+            --org=${{env.SNYKLAB_ORG}}
+            --project-name=BenchmarkJava
