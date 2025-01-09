@@ -20,5 +20,5 @@ jobs:
           command: code test
           args: |
             --severity-threshold=high
-            --org=${{env.SNYKLAB_ORG}}
+            --org=${{ vars.SNYKLAB_ORG }}
             --project-name=BenchmarkJava
