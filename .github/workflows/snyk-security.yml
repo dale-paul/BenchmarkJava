@@ -1,6 +1,10 @@
 name: Example workflow for Maven using Snyk
 on: 
   push:
+    branches:
+      - main
+      - master
+      - develop
   workflow_dispatch:
     
 jobs:
@@ -13,4 +17,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high
+          args: |
+          --severity-threshold=high
+          --org=${{env.SNYKLAB_ORG}}
+          --project-name=BenchmarkJava
