@@ -1,3 +1,4 @@
+name: 'AbbVie Snyk Scan Action'
 
 on: 
   push:
@@ -25,10 +26,7 @@ jobs:
             --org=${{ vars.ORG_ID }}
             --project-name=${{ vars.PROJECT_NAME }} -- >> $GITHUB_OUTPUT
             --json-file-output=/tmp/results.json
-      - name: Check Priority Level
-        shell: bash
-        run: | 
-          $(which cat) /tmp/results.json
+
 
         
          
