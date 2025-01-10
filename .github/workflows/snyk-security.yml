@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
+        id: snyk-results
         uses: snyk/actions/maven@master
         continue-on-error: ${{ vars.CONTINUE == 'true' }}
         env:
@@ -26,9 +27,8 @@ jobs:
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
             --org=${{ vars.ORG_ID }}
             --project-name=${{ vars.PROJECT_NAME }}
-            --json-file-output=./results.json
       - name: Check priority score threshold 
         run: |
-          cat ./results.json
+          cat steps.snyk_results.outputs
          
 
