@@ -22,7 +22,7 @@ jobs:
           args: |
             --severity-threshold=high
             --org=${{ vars.SNYKLAB_ORG }}
-            --project-name=BenchmarkJava
+            --project-name=dale-paul/BenchmarkJava
       - name: Continuously monitor Open Source Software
         uses: snyk/actions/maven@master
         env:
@@ -31,4 +31,4 @@ jobs:
           command: monitor
           args: |
             --org=${{ vars.SNYKLAB_ORG }}
-            --project-name=BenchmarkJava
+            --project-name=dale-paul/BenchmarkJava
