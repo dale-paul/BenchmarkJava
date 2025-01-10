@@ -24,7 +24,7 @@ jobs:
           args: |
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
             --org=${{ vars.ORG_ID }}
-            --project-name=${{ PROJECT_NAME }}
+            --project-name=${{ vars.PROJECT_NAME }}
             --json
             --json-file-output=./results.json
       # - name: Check priority score threshold 
