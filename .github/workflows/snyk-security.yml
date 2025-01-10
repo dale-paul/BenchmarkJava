@@ -1,4 +1,3 @@
-name: Snyk Code Scan
 
 on: 
   push:
@@ -14,7 +13,6 @@ jobs:
     steps:        
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
-        id: snyk-results
         uses: snyk/actions/maven@master
         continue-on-error: ${{ vars.CONTINUE == 'true' }}
         env:
@@ -26,11 +24,13 @@ jobs:
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
             --org=${{ vars.ORG_ID }}
             --project-name=${{ vars.PROJECT_NAME }} -- >> $GITHUB_OUTPUT
-    
-      - name: Get Snyk version
-        id: vars
-        run: echo "version=$(snyk --version)" >> $GITHUB_OUTPUT
-      - name: Test output
-        run: echo ${{ steps.vars.outputs.version }}
+            --json-file-output=${{ github.action_path }}/results.json
+      - name: Check Priority Level
+        run: |
+          echo $GITHUB_ACTION_PATH
+          echo ${{ github.action_path }}  
+          cat ${{ github.action_path }}/results.json
+        shell: bash
+        
          
 
