@@ -20,15 +20,14 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: code test
-          json: true
           args: |
-            --json-file-output=./results.json
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
             --org=${{ vars.ORG_ID }}
             --project-name=${{ vars.PROJECT_NAME }}
-      - name: test
+            --json-file-output=./results.json
+      - name: Test Priority Level
         run: |
-          cat ./results.json
+          cat ./results.json | jq -r
         shell: bash
 
 
