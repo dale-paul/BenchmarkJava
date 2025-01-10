@@ -1,4 +1,6 @@
 name: Snyk Code Scan
+description: Suggested Github Snyk Action
+
 on: 
   push:
     branches:
@@ -14,13 +16,16 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
-        continue-on-error: true
+        continue-on-error: ${{ vars.CONTINUE }}  # fail or continue the build on Snyk errors
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: code test
           args: |
-            --severity-threshold=high
-            --org=${{ vars.SNYKLAB_ORG }}
-            --project-name=dale-paul/BenchmarkJava
+            --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
+            --org=${{ vars.ORG_ID }}
+            --project-name=${{ PROJECT_NAME }}
+            --json
+            --json-file-output=./results.json
+      # - name: Check priority score threshold 
 
