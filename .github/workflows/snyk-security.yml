@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
-        continue-on-error: ${{ vars.CONTINUE }}  # fail or continue the build on Snyk errors
+        continue-on-error: ${{ vars.CONTINUE }}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
