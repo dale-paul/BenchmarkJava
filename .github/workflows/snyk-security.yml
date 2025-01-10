@@ -27,8 +27,8 @@ jobs:
             --project-name=${{ vars.PROJECT_NAME }}
             --json
             --json-file-output=results.json
-       - name: Check priority score threshold 
-         run: |
-           cat results.json
+      - name: Check priority score threshold 
+        run: |
+          cat results.json
          
 
