@@ -12,6 +12,13 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
+    
+      - name: Get Snyk version
+        id: vars
+        run: echo "version=$(snyk --version)" >> $GITHUB_OUTPUT
+      - name: Test output
+        run: echo ${{ steps.vars.outputs.version }}
+        
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         id: snyk-results
