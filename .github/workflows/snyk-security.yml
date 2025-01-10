@@ -29,6 +29,6 @@ jobs:
             --project-name=${{ vars.PROJECT_NAME }}
       - name: Check priority score threshold 
         run: |
-          cat steps.snyk_results.outputs
+          cat ${{ steps.snyk_results.outputs }}
          
 
