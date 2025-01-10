@@ -26,6 +26,9 @@ jobs:
             --org=${{ vars.ORG_ID }}
             --project-name=${{ vars.PROJECT_NAME }}
             --json
-            --json-file-output=./results.json
-      # - name: Check priority score threshold 
+            --json-file-output=results.json
+       - name: Check priority score threshold 
+         run: |
+           cat results.json
+         
 
