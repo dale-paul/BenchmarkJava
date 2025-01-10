@@ -1,5 +1,4 @@
 name: Snyk Code Scan
-description: Suggested Github Snyk Action
 
 on: 
   push:
