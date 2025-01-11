@@ -23,10 +23,11 @@ jobs:
         with:
           command: code test
           args: ${{ env.SNYK_ARGS }}
-      - run: echo "RESULTS_PRESENT=$(echo $(if [[ -f "results.json" ]]; then echo true; else echo false; fi))" >> "$GITHUB_OUTPUT"
-      - run: echo "$RESULTS_PRESENT"
+      - id: file
+        run: echo "RESULTS_PRESENT=$(echo $(if [[ -f "results.json" ]]; then echo 'true'; else echo 'false'; fi))" >> "$GITHUB_OUTPUT"
+      - run: echo 'file present ${{ env.RESULTS_PRESENT }}'
       - name: Test Priority Level
-        if: ${{ env.RESULTS_PRESENT }} #${{ success() }}
+        # if: ${{ env.RESULTS_PRESENT }} #${{ success() }}
         # fail the scan if any priorty score is above our thereshold
         continue-on-error: false
         run: "cat ./results.json | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null || echo '::error::Priority Score exceeded';exit 1"
