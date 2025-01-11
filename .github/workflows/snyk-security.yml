@@ -22,7 +22,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: code test
-          args: ${{ SNYK_ARGS }}
+          args: ${{ env.SNYK_ARGS }}
       - name: Test Priority Level
         if: ${{ success() }}
         # fail the scan if any priorty score is above our thereshold
