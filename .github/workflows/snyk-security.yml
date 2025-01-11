@@ -23,8 +23,8 @@ jobs:
         with:
           command: code test
           args: ${{ env.SNYK_ARGS }}
-      - name: "Test for results file"
-        run: echo "RESULTS_PRESENT=$([[ -r "./results.json" ]])" >> "$GITHUB_OUTPUT"
+      - run: echo "RESULTS_PRESENT=$([[ -r "./results.json" ]])" >> "$GITHUB_OUTPUT"
+      - run: echo "$RESULTS_PRESENT"
       - name: Test Priority Level
         if: ${{ env.RESULTS_PRESENT }} #${{ success() }}
         # fail the scan if any priorty score is above our thereshold
