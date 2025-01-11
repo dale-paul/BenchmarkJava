@@ -15,20 +15,21 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
-        continue-on-error: ${{ vars.CONTINUE == 'true' }}
+        # continue-on-error: true #${{ vars.CONTINUE == 'true' }}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: code test
-          args: "--json-file-output=./results.json --org=${{ vars.ORG_ID }} --project-name=${{ vars.PROJECT_NAME }} --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}"
-      - id: file
-        run: echo "RESULTS_PRESENT=$(echo $(if [[ -f "results.json" ]]; then echo 'true'; else echo 'false'; fi))" >> "$GITHUB_ENV"
-      - run: printf 'File present %s\n' "$RESULTS_PRESENT"
-      - name: Test Priority Level
-        # if: ${{ env.RESULTS_PRESENT }} #${{ success() }}
-        # fail the scan if any priorty score is above our thereshold
-        continue-on-error: false
-        run: "cat ./results.json | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null || echo '::error::Priority Score exceeded';exit 1"
+          args: |
+            "--json-file-output=./results.json --org=${{ vars.ORG_ID }} --project-name=${{ vars.PROJECT_NAME }} "
+      - if: ${{ always() }}
+        run: |
+          echo "RESULTS_PRESENT=$(echo $(if [[ -f "results.json" ]]; then echo 'true'; else echo 'false'; fi))" >> "$GITHUB_ENV"
+      - name: Check if any of the priority scores are above set threshold  
+        if: ${{ env.RESULTS_PRESENT == 'true' }} 
+        # continue-on-error: false
+        run: |
+          "cat ./results.json | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null || echo '::error::Priority Score exceeded';exit 1"
         shell: bash
 
 
