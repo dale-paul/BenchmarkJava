@@ -23,7 +23,7 @@ jobs:
         with:
           command: code test
           args: ${{ env.SNYK_ARGS }}
-      - run: echo "RESULTS_PRESENT=$([[ -r "./results.json" ]])" >> "$GITHUB_OUTPUT"
+      - run: echo "RESULTS_PRESENT=$(echo $(if [[ -f "results.json" ]]; then echo true; else echo false; fi))" >> "$GITHUB_OUTPUT"
       - run: echo "$RESULTS_PRESENT"
       - name: Test Priority Level
         if: ${{ env.RESULTS_PRESENT }} #${{ success() }}
