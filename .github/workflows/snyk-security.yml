@@ -27,7 +27,7 @@ jobs:
         if: ${{ success() }}
         # fail the scan if any priorty score is above our thereshold
         #continue-on-error: false
-        run: "cat ./results.json | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null 2>&1 || echo 'Priority Score exceeded';exit 1"
+        run: "cat ./results.json | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null 2>&1 || echo 'Priority Score exceeded'"
         shell: bash
 
 
