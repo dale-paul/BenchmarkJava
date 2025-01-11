@@ -23,8 +23,10 @@ jobs:
         with:
           command: code test
           args: ${{ env.SNYK_ARGS }}
+      - name: "Test for results file"
+        run: echo ::set-env name=RESULTS_PRESENT::$([[ -r "./results.json" ]])
       - name: Test Priority Level
-        if: $( `[[ -r "results.json" ]]` )  #${{ success() }}
+        if: ${{ env.RESULTS_PRESENT }} #${{ success() }}
         # fail the scan if any priorty score is above our thereshold
         continue-on-error: false
         run: "cat ./results.json | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null || echo '::error::Priority Score exceeded';exit 1"
