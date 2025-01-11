@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
-        #continue-on-error: ${{ vars.CONTINUE == 'true' }}
+        continue-on-error: ${{ vars.CONTINUE == 'true' }}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
@@ -26,7 +26,7 @@ jobs:
       - name: Test Priority Level
         if: ${{ success() }}
         # fail the scan if any priorty score is above our thereshold
-        # continue-on-error: false
+        #continue-on-error: false
         run: "cat ./results.json | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not'"
         shell: bash
 
