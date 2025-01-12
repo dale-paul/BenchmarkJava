@@ -10,7 +10,8 @@ on:
 
 env: 
   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-  RESULTS_FILE: "./results.json"
+  SAST_FILE: "./sast.json"
+  SCA_FILE: "./sca.json"
   SBOM_FILE: "./sbom.json"
   SBOM_FORMAT: "cyclonedx1.4+json"  # cyclonedx1.4+json, cyclonedx1.4+xml, cyclonedx1.5+json, cyclonedx1.5+xml, cyclonedx1.6+json, cyclonedx1.6+xml, and spdx2.3+json
   
@@ -21,13 +22,13 @@ jobs:
     steps:    
       - uses: actions/checkout@master
       
-      - name: Run Snyk to check for vulnerabilities
+      - name: Run Snyk SAST
         uses: snyk/actions/maven@master
         continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         with:
-          command: test
+          command: code test
           args: > 
-            --json-file-output=${{ env.RESULTS_FILE }} 
+            --json-file-output=${{ env.SAST_FILE }} 
             --org=${{ vars.ORG_ID }} 
             --project-name=${{ vars.PROJECT_NAME }} 
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
@@ -38,13 +39,23 @@ jobs:
         if: ${{ always() }} 
         continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         run: >
-          if [[ -f $RESULTS_FILE ]]; then \
-            cat $RESULTS_FILE \
+          if [[ -f $SAST_FILE ]]; then \
+            cat $SAST_FILE \
               | jq -e 'select(.runs) | any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) \
               | not' >/dev/null \
                 || echo ::error:: Priority Score exceeded; exit 1
           fi
         shell: bash
+        
+      - name: Run Snyk SCA (Supply Chain)
+        uses: snyk/actions/maven@master
+        continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
+        with:
+          command: test
+          args: > 
+            --json-file-output=${{ env.SCA_FILE }} 
+            --org=${{ vars.ORG_ID }} 
+            --project-name=${{ vars.PROJECT_NAME }} 
       
       - name: Generate SBOM
         uses: snyk/actions/maven@master
