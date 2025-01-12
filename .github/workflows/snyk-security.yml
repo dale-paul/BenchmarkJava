@@ -17,14 +17,15 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
-        # continue-on-error: false #${{ vars.CONTINUE == 'true' }}
+        continue-on-error: ${{ vars.CONTINUE == 'true' }}  # Monitor mode
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: code test
           args: "--json-file-output=${{ env.RESULTS_FILE }} --org=${{ vars.ORG_ID }} --project-name=${{ vars.PROJECT_NAME }} --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}"
       - name: Check if any of the priority scores are above set threshold  
-        if: ${{ always() }}
+        if: ${{ always() }} 
+        continue-on-error: ${{ vars.CONTINUE == 'true' }} # Monitor mode
         run: |
           if [[ -f $RESULTS_FILE ]]; then
             cat $RESULTS_FILE | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null || echo ::error:: Priority Score exceeded; exit 1
