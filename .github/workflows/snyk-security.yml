@@ -9,10 +9,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  security:
-    runs-on: ubuntu-latest
+  job:
     env: 
       RESULTS_FILE: "./results.json"
+      SBOM_FILE: "./sbom.json"
+    strategy:
+      matrix:
+        result_files: 
+          - ${{ RESULTS_FILE }}
+          - ${{ SBOM_FILE }}
+          
+    runs-on: ubuntu-latest
+
     steps:    
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
@@ -45,8 +53,8 @@ jobs:
       - name: Upload artifacta
         uses: actions/upload-artifact@v4
         with:
-          name: scan_results
-          path: "*.json"    #upload all json files, scan results and sboms
+          name: artifacts
+          path: ${{ matrix.result_files }}
           
 
 
