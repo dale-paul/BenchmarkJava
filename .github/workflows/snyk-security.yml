@@ -49,7 +49,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: sbom
-          args: --format=cyclonedx1.4+json -- > ${{ SBOM_FILE }}
+          args: --format=cyclonedx1.4+json -- > ${{ env.SBOM_FILE }}
       - name: Upload artifacta
         uses: actions/upload-artifact@v4
         with:
