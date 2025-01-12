@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
-        continue-on-error: ${{ vars.CONTINUE == 'true' }}  # Monitor mode
+        continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
@@ -25,10 +25,10 @@ jobs:
           args: "--json-file-output=${{ env.RESULTS_FILE }} --org=${{ vars.ORG_ID }} --project-name=${{ vars.PROJECT_NAME }} --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}"
       - name: Check if any of the priority scores are above set threshold  
         if: ${{ always() }} 
-        continue-on-error: ${{ vars.CONTINUE == 'true' }} # Monitor mode
+        continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         run: |
           if [[ -f $RESULTS_FILE ]]; then
-            cat $RESULTS_FILE | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null || echo ::error:: Priority Score exceeded; exit 1
+            cat $RESULTS_FILE | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null || echo ::error:: Priority Score exceeded; exit 1 2/dev/null
           fi
         shell: bash
 
