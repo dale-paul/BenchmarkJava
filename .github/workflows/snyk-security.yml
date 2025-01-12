@@ -8,11 +8,12 @@ on:
       - develop
   workflow_dispatch:
 
+env: 
+  RESULTS_FILE: results.json
+  SBOM_FILE: sbom.json
+  
 jobs:
   job:
-    env: 
-      RESULTS_FILE: "./results.json"
-      SBOM_FILE: "./sbom.json"
     strategy:
       matrix:
         result_files: 
