@@ -9,19 +9,16 @@ on:
   workflow_dispatch:
 
 env: 
-  RESULTS_FILE: results.json
-  SBOM_FILE: sbom.json
+  RESULTS_FILE: "./results.json"
+  SBOM_FILE: "./sbom.json"
   
 jobs:
   job:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        result_files: 
-          - ${{ env.RESULTS_FILE }}
-          - ${{ env.SBOM_FILE }}
+        results: [ env.RESULTS_FILE, env.SBOM_FILE ]
           
-    runs-on: ubuntu-latest
-
     steps:    
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
