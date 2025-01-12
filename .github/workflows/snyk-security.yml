@@ -9,11 +9,14 @@ on:
   workflow_dispatch:
 
 env: 
+  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
   RESULTS_FILE: "./results.json"
   SBOM_FILE: "./sbom.json"
+  SBOM_FORMAT: "cyclonedx1.4+json"  # cyclonedx1.4+json, cyclonedx1.4+xml, cyclonedx1.5+json, cyclonedx1.5+xml, cyclonedx1.6+json, cyclonedx1.6+xml, and spdx2.3+json
+  
   
 jobs:
-  job:
+  security_scans:
     runs-on: ubuntu-latest
     steps:    
       - uses: actions/checkout@master
@@ -21,8 +24,6 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
         continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: code test
           args: > 
@@ -30,28 +31,30 @@ jobs:
             --org=${{ vars.ORG_ID }} 
             --project-name=${{ vars.PROJECT_NAME }} 
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
-      
+
+      # Special step because so far the Snyk CLI does not accept the Priority Score threshold so have to use this kludge
       - name: Check if any of the priority scores are above set threshold  
         if: ${{ always() }} 
         continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
-        run: |
-          if [[ -f $RESULTS_FILE ]]; then
-            cat $RESULTS_FILE | jq -e 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null || echo ::error:: Priority Score exceeded; exit 1
+        run: >
+          if [[ -f $RESULTS_FILE ]]; then \
+            cat $RESULTS_FILE \
+              | jq -e -c 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) \
+              | not' >/dev/null \
+                || echo ::error:: Priority Score exceeded; exit 1
           fi
         shell: bash
       
-      - name: Generate SBOMs
+      - name: Generate SBOM
         uses: snyk/actions/maven@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: sbom
-          args: --format=cyclonedx1.4+json -- > ${{ env.SBOM_FILE }}
+          args: --format=${{ env.SBOM_FORMAT }} -- > ${{ env.SBOM_FILE }}
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts
+          name: security-scan-artifacts
           path: "*.json"
           
 
