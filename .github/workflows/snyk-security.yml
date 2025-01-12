@@ -20,8 +20,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: code test
-          args: |
-            "--json-file-output=./results.json --org=${{ vars.ORG_ID }} --project-name=${{ vars.PROJECT_NAME }} --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}"
+          args: "--json-file-output=./results.json --org=${{ vars.ORG_ID }} --project-name=${{ vars.PROJECT_NAME }} --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}"
       - if: ${{ always() }}
         run: |
           echo "RESULTS_PRESENT=$(echo $(if [[ -f "results.json" ]]; then echo 'true'; else echo 'false'; fi))" >> "$GITHUB_ENV"
