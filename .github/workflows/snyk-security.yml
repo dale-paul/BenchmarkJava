@@ -33,13 +33,14 @@ jobs:
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
 
       # Special step because so far the Snyk CLI does not accept the Priority Score threshold so have to use this kludge
+      # Will only check JSON output of Code scans
       - name: Check if any of the priority scores are above set threshold  
         if: ${{ always() }} 
         continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         run: >
           if [[ -f $RESULTS_FILE ]]; then \
             cat $RESULTS_FILE \
-              | jq -e -c 'any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) \
+              | jq -e 'select(.runs) | any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) \
               | not' >/dev/null \
                 || echo ::error:: Priority Score exceeded; exit 1
           fi
