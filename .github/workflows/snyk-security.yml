@@ -14,7 +14,7 @@ env:
   SCA_FILE: "./sca.json"
   SBOM_FILE: "./sbom.json"
   # SBOM Formats: cyclonedx1.4+json, cyclonedx1.4+xml, cyclonedx1.5+json, cyclonedx1.5+xml, cyclonedx1.6+json, cyclonedx1.6+xml, and spdx2.3+json
-  SBOM_FORMAT: "cyclonedx1.5+json" 
+  SBOM_FORMAT: "cyclonedx1.4+json" 
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   
   
@@ -61,6 +61,7 @@ jobs:
       
       - name: Generate SBOM
         uses: snyk/actions/maven@master
+        continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         with:
           command: sbom
           args: >
@@ -68,6 +69,7 @@ jobs:
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
+        continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         with:
           name: security-scan-artifacts
           path: "*.json"
