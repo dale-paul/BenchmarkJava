@@ -60,7 +60,7 @@ jobs:
 
       
       - name: Generate SBOM
-        if: $${{ vars.MAKE_SBOM == 'true' }}
+        if: ${{ vars.MAKE_SBOM == 'true' }}
         uses: snyk/actions/maven@master
         continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         with:
