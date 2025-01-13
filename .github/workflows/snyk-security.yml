@@ -26,12 +26,12 @@ jobs:
       
       - name: Run Snyk SAST
         uses: snyk/actions/maven@master
-        continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
+        continue-on-error: false #${{ vars.MONITOR_MODE == 'true' }}
         with:
           command: code
           args: > 
             --json-file-output=${{ env.SAST_FILE }}
-            --org=${{ vars._ID }} 
+            --org=${{ vars.ORG_ID }} 
             --target-reference=${{ env.BRANCH_NAME }}
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
 
@@ -50,7 +50,7 @@ jobs:
         
       - name: Run Snyk SCA (Supply Chain)
         uses: snyk/actions/maven@master
-        continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
+        continue-on-error: false #${{ vars.MONITOR_MODE == 'true' }}
         with:
           command: test
           args: > 
