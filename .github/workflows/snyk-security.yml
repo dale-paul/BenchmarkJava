@@ -36,10 +36,10 @@ jobs:
             --target-reference=${{ env.BRANCH_NAME }}
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
             
-     # - name: Upload result to GitHub Code Scanning
-     #   uses: github/codeql-action/upload-sarif@v3
-     #   with:
-     #     sarif_file: snyk.sarif
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk.sarif
           
       # Special step because so far the Snyk CLI does not accept the Priority Score threshold so have to use this kludge
       # Will only check JSON output of Code scans
