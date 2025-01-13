@@ -31,7 +31,7 @@ jobs:
           command: code test
           args: > 
             --json-file-output=${{ env.SAST_FILE }}
-          #  --sarif-file-output=snyk.sarif
+            --sarif-file-output=snyk.sarif
             --org=${{ vars.ORG_ID }} 
             --target-reference=${{ env.BRANCH_NAME }}
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
@@ -61,10 +61,9 @@ jobs:
 #          command: test
           command: monitor
           args: > 
-           # --json-file-output=${{ env.SCA_FILE }}
             --org=${{ vars.ORG_ID }}
             --target-reference=${{ env.BRANCH_NAME }}
-
+# --json-file-output=${{ env.SCA_FILE }}
       
       - name: Generate SBOM
         if: ${{ vars.MAKE_SBOM == 'true' }}
