@@ -50,7 +50,7 @@ jobs:
         
       - name: Run Snyk SCA (Supply Chain)
         uses: snyk/actions/maven@master
-        continue-on-error: false #${{ vars.MONITOR_MODE == 'true' }}
+        continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         with:
           command: test
           args: > 
