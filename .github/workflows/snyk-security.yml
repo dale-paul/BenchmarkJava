@@ -30,7 +30,7 @@ jobs:
         with:
           command: code
           args: > 
-            --json-file-output=${{ SAST_FILE }}
+            --json-file-output=${{ env.SAST_FILE }}
             --org=${{ vars._ID }} 
             --target-reference=${{ env.BRANCH_NAME }}
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
@@ -54,7 +54,7 @@ jobs:
         with:
           command: test
           args: > 
-            --json-file-output=${{ SCA_FILE }}
+            --json-file-output=${{ env.SCA_FILE }}
             --org=${{ vars.ORG_ID }}
             --target-reference=${{ env.BRANCH_NAME }}
 
