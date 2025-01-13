@@ -26,7 +26,7 @@ jobs:
       
       - name: Run Snyk SAST
         uses: snyk/actions/maven@master
-        continue-on-error: false #${{ vars.MONITOR_MODE == 'true' }}
+        continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         with:
           command: code test
           args: > 
