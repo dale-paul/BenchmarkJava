@@ -53,12 +53,11 @@ jobs:
         uses: snyk/actions/maven@master
         continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         with:
-          command: test
+          command: monitor
           args: > 
             --json
             --org=${{ vars.ORG_ID }} 
             --project-name=${{ vars.PROJECT_NAME }} -- > ${{ env.SCA_FILE }}
-            --target-reference=${{ env.BRANCH_NAME }}
       
       - name: Generate SBOM
         uses: snyk/actions/maven@master
