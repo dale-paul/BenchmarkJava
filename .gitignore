@@ -4,6 +4,7 @@
 .project
 .settings/
 .idea/
+.vscode
 *.iml
 
 data/out.csv
