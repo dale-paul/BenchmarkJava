@@ -35,6 +35,7 @@ jobs:
             --org=${{ vars.ORG_ID }} 
             --target-reference=${{ env.BRANCH_NAME }}
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
+            
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v2
         with:
