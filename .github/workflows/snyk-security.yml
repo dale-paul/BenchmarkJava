@@ -28,7 +28,7 @@ jobs:
         uses: snyk/actions/maven@master
         continue-on-error: false #${{ vars.MONITOR_MODE == 'true' }}
         with:
-          command: code
+          command: code test
           args: > 
             --json-file-output=${{ env.SAST_FILE }}
             --org=${{ vars.ORG_ID }} 
