@@ -30,10 +30,10 @@ jobs:
         with:
           command: code
           args: > 
-            --json
-            --org=${{ vars.ORG_ID }} 
+            --json-file-output=${{ SAST_FILE }}
+            --org=${{ vars._ID }} 
             --target-reference=${{ env.BRANCH_NAME }}
-            --severity-threshold=${{ vars.SEVERITY_THRESHOLD }} -- > {{ env.SAST_FILE }}
+            --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
 
       # Special step because so far the Snyk CLI does not accept the Priority Score threshold so have to use this kludge
       # Will only check JSON output of Code scans
@@ -54,12 +54,13 @@ jobs:
         with:
           command: test
           args: > 
-            --json
+            --json-file-output=${{ SCA_FILE }}
             --org=${{ vars.ORG_ID }}
-            --target-reference=${{ env.BRANCH_NAME }}   -- > ${{ env.SCA_FILE }}
+            --target-reference=${{ env.BRANCH_NAME }}
 
       
       - name: Generate SBOM
+        if: $${{ MAKE_SBOM }} == 'true'
         uses: snyk/actions/maven@master
         continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         with:
