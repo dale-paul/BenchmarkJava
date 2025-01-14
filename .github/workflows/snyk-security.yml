@@ -61,9 +61,10 @@ jobs:
         with:
           command: monitor
           args: > 
+            --json
             --org=${{ vars.ORG_ID }}
             --target-reference=${{ env.BRANCH_NAME }}
-            --all-projects
+            --all-projects -- > ${{ env.SCA_FILE }}
           
       - name: Generate SBOM
         if: ${{ vars.MAKE_SBOM == 'true' }}
