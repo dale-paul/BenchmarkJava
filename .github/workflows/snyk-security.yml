@@ -31,7 +31,7 @@ jobs:
           args: > 
             --json-file-output=${{ env.SAST_FILE }}
             --sarif-file-output=code-scan.sarif
-            --project-name=${{ var.PROJECT_NAME }}
+            --project-name=${{ vars.PROJECT_NAME }}
             --org=${{ vars.ORG_ID }} 
             --target-reference=${{ env.BRANCH_NAME }}
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
@@ -64,7 +64,7 @@ jobs:
           args: > 
             --json
             --org=${{ vars.ORG_ID }}
-            --project-name=${{ var.PROJECT_NAME }}
+            --project-name=${{ vars.PROJECT_NAME }}
             --target-reference=${{ env.BRANCH_NAME }}
             --all-projects -- > ${{ env.SCA_FILE }}
           
