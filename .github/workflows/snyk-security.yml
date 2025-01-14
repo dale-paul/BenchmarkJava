@@ -59,12 +59,11 @@ jobs:
         uses: snyk/actions/maven@master
         continue-on-error: ${{ vars.MONITOR_MODE == 'true' }}
         with:
-          command: test
+          command: monitor
           args: > 
             --org=${{ vars.ORG_ID }}
             --target-reference=${{ env.BRANCH_NAME }}
-            --sarif-file-output=open-source.sarif
-            --json-file-output=${{ env.SCA_FILE }}
+            --all-projects
           
       - name: Generate SBOM
         if: ${{ vars.MAKE_SBOM == 'true' }}
