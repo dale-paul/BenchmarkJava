@@ -31,7 +31,7 @@ jobs:
           command: code test
           args: > 
             --json-file-output=${{ env.SAST_FILE }}
-            --sarif-file-output=code-scan.sarif
+            --sarif-file-output=codescan.sarif
             --project-name=${{ env.PROJECT_NAME }}
             --org=${{ vars.ORG_ID }} 
             --target-reference=${{ env.BRANCH_NAME }}
@@ -40,7 +40,7 @@ jobs:
       - name: Upload Code report to GitHub advanced security
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: code-scan.sarif
+          sarif_file: codescan.sarif
           
       # Special step because so far the Snyk CLI does not accept the Priority Score threshold so have to use this kludge
       # Will only check JSON output of Code scans
