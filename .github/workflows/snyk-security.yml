@@ -51,6 +51,8 @@ jobs:
             cat $SAST_FILE \
               | jq -e 'select(.runs) | any(.runs[].results[].properties.priorityScore; . >= ${{ vars.PRIORITY_SCORE }}) | not' >/dev/null \
                 || echo ::error:: Priority Score exceeded; exit 1
+          else
+            echo "::error:: Code scan incomplete: missing results file"; exit 1
           fi
         shell: bash
         
