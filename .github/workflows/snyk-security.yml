@@ -16,6 +16,7 @@ env:
   # SBOM Formats: cyclonedx1.4+json, cyclonedx1.4+xml, cyclonedx1.5+json, cyclonedx1.5+xml, cyclonedx1.6+json, cyclonedx1.6+xml, and spdx2.3+json
   SBOM_FORMAT: "cyclonedx1.4+json" 
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  PROJECT_NAME: ${{ github.repository }}
   
 jobs:
   security_scans:
@@ -31,7 +32,7 @@ jobs:
           args: > 
             --json-file-output=${{ env.SAST_FILE }}
             --sarif-file-output=code-scan.sarif
-            --project-name=${{ vars.PROJECT_NAME }}
+            --project-name=${{ env.PROJECT_NAME }}
             --org=${{ vars.ORG_ID }} 
             --target-reference=${{ env.BRANCH_NAME }}
             --severity-threshold=${{ vars.SEVERITY_THRESHOLD }}
@@ -62,9 +63,8 @@ jobs:
         with:
           command: monitor
           args: > 
-            --json
             --org=${{ vars.ORG_ID }}
-            --project-name=${{ vars.PROJECT_NAME }}
+            --project-name=${{ env.PROJECT_NAME }}
             --target-reference=${{ env.BRANCH_NAME }}
             --all-projects -- > ${{ env.SCA_FILE }}
           
